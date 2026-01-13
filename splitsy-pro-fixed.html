@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Splitsy Pro</title>
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiU3BsaXRzeSBQcm8iLCJzaG9ydF9uYW1lIjoiU3BsaXRzeSBQcm8iLCJzdGFydF91cmwiOiIuLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMwMDAwMDAiLCJ0aGVtZV9jb2xvciI6IiMwMDAwMDAifQ==">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #1c1c1e;
+            --surface-2: #2c2c2e;
+            --surface-3: #3a3a3c;
+            --accent: #007AFF;
+            --success: #30D158;
+            --danger: #FF453A;
+            --warning: #FF9F0A;
+            --text: #ffffff;
+            --text-2: #8E8E93;
+            --border: rgba(255, 255, 255, 0.1);
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        :root.light {
+            --bg: #ffffff;
+            --surface: #f2f2f7;
+            --surface-2: #e5e5ea;
+            --surface-3: #d1d1d6;
+            --accent: #007AFF;
+            --success: #34C759;
+            --danger: #FF3B30;
+            --warning: #FF9500;
+            --text: #000000;
+            --text-2: #6d6d70;
+            --border: rgba(0, 0, 0, 0.1);
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            padding-bottom: env(safe-area-inset-bottom);
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .app-header {
+            background: rgba(28, 28, 30, 0.95);
+            backdrop-filter: blur(20px);
+            padding: max(15px, env(safe-area-inset-top) + 15px) 20px 15px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        :root.light .app-header {
+            background: rgba(242, 242, 247, 0.95);
+        }
+
+        .header-content h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), var(--success));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .header-content p {
+            color: var(--text-2);
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .header-btn {
+            background: var(--surface-2);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .header-btn:active {
+            background: var(--surface-3);
+            transform: scale(0.95);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .card:active {
+            transform: scale(0.98);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--surface-2), var(--surface-3));
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-header h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .category-btn {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            color: var(--text);
+        }
+
+        .category-btn:active,
+        .category-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+            transform: scale(0.95);
+        }
+
+        .quick-amounts {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .amount-btn {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text);
+        }
+
+        .amount-btn:active {
+            background: var(--success);
+            color: white;
+            transform: scale(0.95);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            flex: 1;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-2);
+            z-index: 1;
+        }
+
+        .input, select {
+            width: 100%;
+            padding: 16px 16px 16px 40px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: var(--surface-3);
+        }
+
+        .input::placeholder {
+            color: var(--text-2);
+        }
+
+        .btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 52px;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+            background: #0056b3;
+        }
+
+        .btn-success {
+            background: var(--success);
+        }
+
+        .btn-success:active {
+            background: #28a745;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+        }
+
+        .btn-danger:active {
+            background: #dc2626;
+        }
+
+        .btn-secondary {
+            background: var(--surface-2);
+            color: var(--text);
+        }
+
+        .btn-secondary:active {
+            background: var(--surface-3);
+        }
+
+        .list-item {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .item-left {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .item-info {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .item-info h4 {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .item-info p {
+            color: var(--text-2);
+            font-size: 0.8rem;
+            word-break: break-all;
+            line-height: 1.3;
+        }
+
+        .item-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .upi-btn {
+            background: var(--warning);
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .upi-btn:active {
+            transform: scale(0.9);
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: var(--danger);
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .remove-btn:active {
+            background: rgba(255, 69, 58, 0.1);
+            transform: scale(0.9);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            background: var(--surface-2);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .action-btn:active {
+            background: var(--surface-3);
+            transform: scale(0.95);
+        }
+
+        .action-btn.share {
+            background: var(--accent);
+            color: white;
+        }
+
+        .action-btn.save {
+            background: var(--warning);
+            color: white;
+        }
+
+        .action-btn.clear {
+            background: var(--danger);
+            color: white;
+        }
+
+        .results {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 16px;
+        }
+
+        .total-expenses {
+            background: linear-gradient(135deg, var(--accent), var(--success));
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .total-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .per-person {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .settlement-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-direction: column;
+        }
+
+        .settlement-main {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .settlement-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .settlement-icon.up {
+            background: rgba(48, 209, 88, 0.2);
+            color: var(--success);
+        }
+
+        .settlement-icon.down {
+            background: rgba(255, 69, 58, 0.2);
+            color: var(--danger);
+        }
+
+        .settlement-icon.neutral {
+            background: rgba(142, 142, 147, 0.2);
+            color: var(--text-2);
+        }
+
+        .payment-options {
+            width: 100%;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .payment-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .payment-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .payment-btn:active {
+            transform: scale(0.95);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            margin: 50px auto;
+            padding: 24px;
+            border-radius: 20px;
+            max-width: 400px;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-2);
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .close-btn:active {
+            background: var(--surface-2);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: max(20px, env(safe-area-inset-bottom) + 20px);
+            left: 16px;
+            right: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            color: var(--text);
+            transform: translateY(100px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            text-align: center;
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        .toast.show {
+            transform: translateY(0);
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-2);
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        .groups-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .group-item {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .group-item:active {
+            background: var(--surface-3);
+            transform: scale(0.98);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 16px 12px;
+            }
+            
+            .card-body {
+                padding: 16px;
+            }
+            
+            .input-group {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-content">
+            <h1>🧮 Splitsy Pro</h1>
+            <p>Premium Expense Management</p>
+            <div class="header-actions">
+                <button class="header-btn" onclick="toggleDarkMode()" id="themeToggle">
+                    <i class="fas fa-moon"></i> <span id="themeText">Light</span>
+                </button>
+                <button class="header-btn" onclick="showGroups()">
+                    <i class="fas fa-history"></i> History
+                </button>
+                <button class="header-btn" onclick="installApp()">
+                    <i class="fas fa-download"></i> Install
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Groups Card -->
+        <div class="card" id="groupsCard" style="display: none;">
+            <div class="card-header">
+                <div class="card-header-left">
+                    <i class="fas fa-history"></i>
+                    <h2>Saved Groups</h2>
+                </div>
+                <button class="header-btn" onclick="hideGroups()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="groupsList" class="groups-list"></div>
+            </div>
+        </div>
+
+        <!-- People Card -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-header-left">
+                    <i class="fas fa-users"></i>
+                    <h2>People</h2>
+                </div>
+                <span id="peopleCount">0 people</span>
+            </div>
+            <div class="card-body">
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" id="personName" class="input" placeholder="Enter person's name">
+                    </div>
+                    <button onclick="addPerson()" class="btn">
+                        <i class="fas fa-plus"></i> Add
+                    </button>
+                </div>
+                <div id="peopleList"></div>
+            </div>
+        </div>
+
+        <!-- Expenses Card -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-header-left">
+                    <i class="fas fa-receipt"></i>
+                    <h2>Expenses</h2>
+                </div>
+                <span id="expenseCount">₹0 total</span>
+            </div>
+            <div class="card-body">
+                <div class="categories">
+                    <button class="category-btn" onclick="selectCategory('🍽️', 'Food')">🍽️ Food</button>
+                    <button class="category-btn" onclick="selectCategory('🚗', 'Transport')">🚗 Transport</button>
+                    <button class="category-btn" onclick="selectCategory('🏨', 'Stay')">🏨 Stay</button>
+                    <button class="category-btn" onclick="selectCategory('🎉', 'Fun')">🎉 Fun</button>
+                </div>
+                
+                <div class="quick-amounts">
+                    <button class="amount-btn" onclick="setAmount(50)">₹50</button>
+                    <button class="amount-btn" onclick="setAmount(100)">₹100</button>
+                    <button class="amount-btn" onclick="setAmount(200)">₹200</button>
+                    <button class="amount-btn" onclick="setAmount(500)">₹500</button>
+                </div>
+
+                <div class="input-wrapper" style="margin-bottom: 16px;">
+                    <i class="fas fa-hand-holding-usd input-icon"></i>
+                    <select id="paidBy" class="input">
+                        <option value="">Who paid?</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <i class="fas fa-rupee-sign input-icon"></i>
+                        <input type="number" id="amount" class="input" placeholder="Amount" step="0.01">
+                    </div>
+                    <div class="input-wrapper">
+                        <i class="fas fa-tag input-icon"></i>
+                        <input type="text" id="description" class="input" placeholder="Description">
+                    </div>
+                </div>
+                
+                <button onclick="addExpense()" class="btn btn-success" style="width: 100%; margin-bottom: 16px;">
+                    <i class="fas fa-plus"></i> Add Expense
+                </button>
+                
+                <div id="expensesList"></div>
+            </div>
+        </div>
+
+        <!-- Settlement Card -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-header-left">
+                    <i class="fas fa-balance-scale"></i>
+                    <h2>Settlement</h2>
+                </div>
+            </div>
+            <div class="card-body">
+                <button onclick="calculateSettlement()" class="btn btn-success" style="width: 100%; margin-bottom: 20px;">
+                    <i class="fas fa-calculator"></i> Calculate Split
+                </button>
+                
+                <div class="action-buttons">
+                    <button class="action-btn share" onclick="shareResults()">
+                        <i class="fas fa-share"></i> Share
+                    </button>
+                    <button class="action-btn save" onclick="saveGroup()">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                    <button class="action-btn clear" onclick="clearAll()">
+                        <i class="fas fa-trash"></i> Clear
+                    </button>
+                </div>
+                
+                <div id="results"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- UPI Modal -->
+    <div id="upiModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-mobile-alt"></i> <span id="upiModalTitle">Add UPI ID</span></h3>
+                <button class="close-btn" onclick="closeUPIModal()">&times;</button>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <div class="input-wrapper">
+                    <i class="fas fa-mobile-alt input-icon"></i>
+                    <input type="text" id="upiInput" class="input" placeholder="Enter UPI ID (e.g., user@paytm)" oninput="validateUPIInput()">
+                </div>
+                <div id="upiValidation" style="font-size: 0.8rem; margin-top: 8px; min-height: 16px;"></div>
+                <div style="font-size: 0.8rem; color: var(--text-2); margin-top: 8px;">
+                    Examples: user@paytm, 9876543210@ybl, user@oksbi
+                </div>
+            </div>
+            <div style="display: flex; gap: 12px;">
+                <button class="btn" onclick="saveUPI()" style="flex: 1;">
+                    <i class="fas fa-save"></i> Save
+                </button>
+                <button class="btn btn-danger" onclick="removeUPI()" style="flex: 1;">
+                    <i class="fas fa-trash"></i> Remove
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        let people = [];
+        let expenses = [];
+        let selectedCategory = '';
+        let isDarkMode = true;
+        let peopleUPI = {};
+
+        window.addEventListener('load', () => {
+            loadData();
+            registerServiceWorker();
+        });
+
+        function registerServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('data:text/javascript;base64,c2VsZi5hZGRFdmVudExpc3RlbmVyKCdpbnN0YWxsJywgZXZlbnQgPT4ge30pOw==');
+            }
+        }
+
+        function hapticFeedback(type = 'light') {
+            if ('vibrate' in navigator) {
+                switch(type) {
+                    case 'light': navigator.vibrate(10); break;
+                    case 'medium': navigator.vibrate(20); break;
+                    case 'heavy': navigator.vibrate(50); break;
+                    case 'success': navigator.vibrate([20, 10, 20]); break;
+                    case 'error': navigator.vibrate([50, 20, 50]); break;
+                }
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        function saveData() {
+            const data = { people, expenses, peopleUPI, timestamp: Date.now() };
+            localStorage.setItem('splitsyProData', JSON.stringify(data));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('splitsyProData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                people = data.people || [];
+                expenses = data.expenses || [];
+                peopleUPI = data.peopleUPI || {};
+                updatePeopleList();
+                updatePaidBySelect();
+                updateExpensesList();
+                updateCounts();
+            }
+            
+            // Load theme preference
+            const savedTheme = localStorage.getItem('splitsyProTheme');
+            if (savedTheme === 'light') {
+                document.documentElement.classList.add('light');
+                isDarkMode = false;
+                updateThemeButton();
+            }
+        }
+
+        function updateCounts() {
+            document.getElementById('peopleCount').textContent = `${people.length} people`;
+            const total = expenses.reduce((sum, exp) => sum + exp.amount, 0);
+            document.getElementById('expenseCount').textContent = `₹${total.toFixed(2)} total`;
+        }
+
+        function selectCategory(emoji, name) {
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            selectedCategory = emoji + ' ' + name;
+            document.getElementById('description').value = selectedCategory;
+            hapticFeedback('light');
+        }
+
+        function setAmount(amount) {
+            document.getElementById('amount').value = amount;
+            hapticFeedback('light');
+        }
+
+        function addPerson() {
+            const nameInput = document.getElementById('personName');
+            const name = nameInput.value.trim();
+            
+            if (name && !people.includes(name)) {
+                hapticFeedback('medium');
+                people.push(name);
+                nameInput.value = '';
+                updatePeopleList();
+                updatePaidBySelect();
+                updateCounts();
+                saveData();
+                showToast(`${name} added!`);
+            } else if (name && people.includes(name)) {
+                hapticFeedback('error');
+                showToast('Person already added!', 'error');
+            }
+        }
+
+        function updatePeopleList() {
+            const list = document.getElementById('peopleList');
+            if (people.length === 0) {
+                list.innerHTML = `
+                    <div class="empty">
+                        <div class="empty-icon"><i class="fas fa-users"></i></div>
+                        <p>No people added yet</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            list.innerHTML = people.map(person => `
+                <div class="list-item fade-in">
+                    <div class="item-left">
+                        <div class="avatar">${person.charAt(0).toUpperCase()}</div>
+                        <div class="item-info">
+                            <h4>${person}</h4>
+                            ${peopleUPI[person] ? `<p><i class="fas fa-mobile-alt"></i> ${peopleUPI[person]}</p>` : ''}
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="upi-btn" onclick="openUPIModal('${person}')">
+                            <i class="fas fa-mobile-alt"></i> ${peopleUPI[person] ? 'Edit' : 'Add'}
+                        </button>
+                        <button onclick="removePerson('${person}')" class="remove-btn">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function removePerson(name) {
+            hapticFeedback('light');
+            people = people.filter(p => p !== name);
+            delete peopleUPI[name];
+            expenses = expenses.filter(e => e.paidBy !== name);
+            updatePeopleList();
+            updatePaidBySelect();
+            updateExpensesList();
+            updateCounts();
+            saveData();
+            showToast(`${name} removed!`);
+        }
+
+        function updatePaidBySelect() {
+            const select = document.getElementById('paidBy');
+            select.innerHTML = '<option value="">Who paid?</option>' + 
+                people.map(person => `<option value="${person}">${person}</option>`).join('');
+        }
+
+        function addExpense() {
+            const paidBy = document.getElementById('paidBy').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const description = document.getElementById('description').value.trim();
+            
+            if (paidBy && amount > 0) {
+                hapticFeedback('medium');
+                expenses.push({
+                    paidBy,
+                    amount,
+                    description: description || 'Expense',
+                    timestamp: Date.now()
+                });
+                
+                document.getElementById('paidBy').value = '';
+                document.getElementById('amount').value = '';
+                document.getElementById('description').value = '';
+                document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+                
+                updateExpensesList();
+                updateCounts();
+                saveData();
+                showToast(`₹${amount} expense added!`);
+            } else {
+                hapticFeedback('error');
+                showToast('Please fill all required fields!', 'error');
+            }
+        }
+
+        function updateExpensesList() {
+            const list = document.getElementById('expensesList');
+            if (expenses.length === 0) {
+                list.innerHTML = `
+                    <div class="empty">
+                        <div class="empty-icon"><i class="fas fa-receipt"></i></div>
+                        <p>No expenses added yet</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            list.innerHTML = expenses.map((expense, index) => `
+                <div class="list-item fade-in">
+                    <div class="item-left">
+                        <div class="avatar" style="background: var(--success);">₹</div>
+                        <div class="item-info">
+                            <h4>${expense.paidBy} paid ₹${expense.amount.toFixed(2)}</h4>
+                            <p>${expense.description}</p>
+                        </div>
+                    </div>
+                    <button onclick="removeExpense(${index})" class="remove-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function removeExpense(index) {
+            hapticFeedback('light');
+            expenses.splice(index, 1);
+            updateExpensesList();
+            updateCounts();
+            saveData();
+            showToast('Expense removed!');
+        }
+
+        function calculateSettlement() {
+            if (people.length === 0 || expenses.length === 0) {
+                hapticFeedback('error');
+                showToast('Please add people and expenses first!', 'error');
+                return;
+            }
+            
+            hapticFeedback('heavy');
+            
+            const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+            const perPersonShare = totalExpenses / people.length;
+            
+            const balances = {};
+            people.forEach(person => balances[person] = 0);
+            expenses.forEach(expense => balances[expense.paidBy] += expense.amount);
+            people.forEach(person => balances[person] -= perPersonShare);
+            
+            const settlements = [];
+            const creditors = [];
+            const debtors = [];
+            
+            Object.entries(balances).forEach(([person, balance]) => {
+                if (balance > 0.01) creditors.push({ person, amount: balance });
+                else if (balance < -0.01) debtors.push({ person, amount: -balance });
+            });
+            
+            creditors.sort((a, b) => b.amount - a.amount);
+            debtors.sort((a, b) => b.amount - a.amount);
+            
+            let i = 0, j = 0;
+            while (i < creditors.length && j < debtors.length) {
+                const creditor = creditors[i];
+                const debtor = debtors[j];
+                const amount = Math.min(creditor.amount, debtor.amount);
+                
+                if (amount > 0.01) {
+                    settlements.push({ from: debtor.person, to: creditor.person, amount });
+                }
+                
+                creditor.amount -= amount;
+                debtor.amount -= amount;
+                
+                if (creditor.amount < 0.01) i++;
+                if (debtor.amount < 0.01) j++;
+            }
+            
+            displayResults(totalExpenses, perPersonShare, settlements, balances);
+            hapticFeedback('success');
+            showToast('Settlement calculated!');
+        }
+
+        function displayResults(total, perPerson, settlements, balances) {
+            const resultsDiv = document.getElementById('results');
+            
+            let html = `
+                <div class="total-expenses">
+                    <div class="total-amount">₹${total.toFixed(2)}</div>
+                    <div class="per-person">₹${perPerson.toFixed(2)} per person</div>
+                </div>
+                
+                <h3 style="margin-bottom: 16px; color: var(--text);">Individual Balances</h3>
+            `;
+            
+            Object.entries(balances).forEach(([person, balance]) => {
+                const status = balance > 0.01 ? `gets back ₹${balance.toFixed(2)}` : 
+                              balance < -0.01 ? `owes ₹${(-balance).toFixed(2)}` : 'is settled';
+                const iconClass = balance > 0.01 ? 'up' : balance < -0.01 ? 'down' : 'neutral';
+                const icon = balance > 0.01 ? '↑' : balance < -0.01 ? '↓' : '✓';
+                
+                html += `
+                    <div class="settlement-item">
+                        <div class="settlement-main">
+                            <div class="settlement-icon ${iconClass}">${icon}</div>
+                            <div><strong>${person}</strong> ${status}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            if (settlements.length > 0) {
+                html += '<h3 style="margin: 24px 0 16px; color: var(--text);">Settlement Instructions</h3>';
+                settlements.forEach(settlement => {
+                    const receiverUPI = peopleUPI[settlement.to];
+                    const amount = settlement.amount.toFixed(2);
+                    
+                    html += `
+                        <div class="settlement-item">
+                            <div class="settlement-main">
+                                <div class="settlement-icon" style="background: rgba(0, 122, 255, 0.2); color: var(--accent);">→</div>
+                                <div><strong>${settlement.from}</strong> pays <strong>${settlement.to}</strong> <strong style="color: var(--success);">₹${amount}</strong></div>
+                            </div>
+                            ${receiverUPI ? `
+                                <div class="payment-options">
+                                    <div style="text-align: center; margin-bottom: 12px; font-size: 0.9rem; color: var(--text-2);">
+                                        <i class="fas fa-mobile-alt"></i> UPI: ${receiverUPI}
+                                    </div>
+                                    <div class="payment-buttons">
+                                        <button class="payment-btn" style="background: var(--success); color: white;" onclick="payViaUPI('${receiverUPI}', ${amount}, '${settlement.to}', '${settlement.from}')">
+                                            <i class="fas fa-mobile-alt"></i> Pay Now
+                                        </button>
+                                        <button class="payment-btn" style="background: var(--surface-2); color: var(--text); border: 1px solid var(--border);" onclick="copyUPIDetails('${receiverUPI}', ${amount})">
+                                            <i class="fas fa-copy"></i> Copy UPI
+                                        </button>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+            } else {
+                html += `
+                    <div class="settlement-item">
+                        <div class="settlement-main" style="justify-content: center;">
+                            <div class="settlement-icon up">✓</div>
+                            <div>Everyone is already settled!</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            resultsDiv.innerHTML = html;
+        }
+
+        function shareResults() {
+            if (expenses.length === 0) {
+                showToast('No expenses to share!', 'error');
+                return;
+            }
+
+            const total = expenses.reduce((sum, exp) => sum + exp.amount, 0);
+            const perPerson = total / people.length;
+            
+            let message = `💎 *Splitsy Pro - Expense Summary*\n\n`;
+            message += `👥 People: ${people.join(', ')}\n`;
+            message += `💵 Total: ₹${total.toFixed(2)}\n`;
+            message += `👤 Per Person: ₹${perPerson.toFixed(2)}\n\n`;
+            
+            message += `📝 *Expenses:*\n`;
+            expenses.forEach(exp => {
+                message += `• ${exp.paidBy} paid ₹${exp.amount.toFixed(2)} for ${exp.description}\n`;
+            });
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Splitsy Pro - Expense Summary',
+                    text: message
+                });
+            } else {
+                navigator.clipboard.writeText(message);
+                showToast('Copied to clipboard!');
+            }
+            hapticFeedback('medium');
+        }
+
+        function saveGroup() {
+            if (people.length === 0 || expenses.length === 0) {
+                showToast('Nothing to save!', 'error');
+                return;
+            }
+
+            const groupName = prompt('Enter group name:') || `Group ${Date.now()}`;
+            const groups = JSON.parse(localStorage.getItem('splitsyProGroups') || '[]');
+            
+            groups.unshift({
+                name: groupName,
+                people: [...people],
+                expenses: [...expenses],
+                peopleUPI: {...peopleUPI},
+                timestamp: Date.now()
+            });
+
+            if (groups.length > 10) groups.splice(10);
+            
+            localStorage.setItem('splitsyProGroups', JSON.stringify(groups));
+            showToast(`Group "${groupName}" saved!`);
+            hapticFeedback('medium');
+        }
+
+        function showGroups() {
+            const groups = JSON.parse(localStorage.getItem('splitsyProGroups') || '[]');
+            const groupsList = document.getElementById('groupsList');
+            
+            if (groups.length === 0) {
+                groupsList.innerHTML = '<div class="empty"><div class="empty-icon"><i class="fas fa-history"></i></div><p>No saved groups</p></div>';
+            } else {
+                groupsList.innerHTML = groups.map((group, index) => 
+                    `<div class="group-item" onclick="loadGroup(${index})">
+                        <div>
+                            <strong>${group.name}</strong><br>
+                            <small style="color: var(--text-2);">${group.people.length} people • ₹${group.expenses.reduce((s, e) => s + e.amount, 0).toFixed(2)}</small>
+                        </div>
+                        <button class="remove-btn" onclick="deleteGroup(${index}); event.stopPropagation();">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>`
+                ).join('');
+            }
+            
+            document.getElementById('groupsCard').style.display = 'block';
+            hapticFeedback('light');
+        }
+
+        function hideGroups() {
+            document.getElementById('groupsCard').style.display = 'none';
+        }
+
+        function loadGroup(index) {
+            const groups = JSON.parse(localStorage.getItem('splitsyProGroups') || '[]');
+            const group = groups[index];
+            
+            people = [...group.people];
+            expenses = [...group.expenses];
+            peopleUPI = group.peopleUPI || {};
+            
+            updatePeopleList();
+            updatePaidBySelect();
+            updateExpensesList();
+            updateCounts();
+            saveData();
+            hideGroups();
+            
+            showToast(`Loaded "${group.name}"!`);
+            hapticFeedback('medium');
+        }
+
+        function deleteGroup(index) {
+            const groups = JSON.parse(localStorage.getItem('splitsyProGroups') || '[]');
+            groups.splice(index, 1);
+            localStorage.setItem('splitsyProGroups', JSON.stringify(groups));
+            showGroups();
+            showToast('Group deleted!');
+            hapticFeedback('light');
+        }
+
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            
+            if (isDarkMode) {
+                document.documentElement.classList.remove('light');
+                localStorage.setItem('splitsyProTheme', 'dark');
+            } else {
+                document.documentElement.classList.add('light');
+                localStorage.setItem('splitsyProTheme', 'light');
+            }
+            
+            updateThemeButton();
+            showToast(isDarkMode ? 'Dark mode on' : 'Light mode on');
+            hapticFeedback('light');
+        }
+        
+        function updateThemeButton() {
+            const themeText = document.getElementById('themeText');
+            const themeIcon = document.querySelector('#themeToggle i');
+            
+            if (isDarkMode) {
+                themeText.textContent = 'Light';
+                themeIcon.className = 'fas fa-sun';
+            } else {
+                themeText.textContent = 'Dark';
+                themeIcon.className = 'fas fa-moon';
+            }
+        }
+
+        function installApp() {
+            showToast('Add to Home Screen from browser menu!');
+            hapticFeedback('medium');
+        }
+
+        function clearAll() {
+            if (confirm('Are you sure you want to clear all data?')) {
+                hapticFeedback('heavy');
+                people = [];
+                expenses = [];
+                peopleUPI = {};
+                updatePeopleList();
+                updatePaidBySelect();
+                updateExpensesList();
+                updateCounts();
+                document.getElementById('results').innerHTML = '';
+                saveData();
+                showToast('All data cleared!');
+            }
+        }
+
+        function payViaUPI(upiId, amount, toPerson, fromPerson) {
+            // Generate UPI payment URL
+            const upiUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(toPerson)}&am=${amount}&cu=INR&tn=${encodeURIComponent(`Splitsy Pro payment from ${fromPerson}`)}`;
+            
+            // Try to open UPI app - this will show the system's UPI app chooser
+            const link = document.createElement('a');
+            link.href = upiUrl;
+            link.click();
+            
+            hapticFeedback('medium');
+            showToast('Opening UPI apps...');
+        }
+        
+        function copyUPIDetails(upiId, amount) {
+            const details = `UPI ID: ${upiId}\nAmount: ₹${amount}`;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(details);
+                showToast('UPI details copied!');
+            } else {
+                showToast(`UPI: ${upiId}, Amount: ₹${amount}`);
+            }
+            hapticFeedback('light');
+        }
+
+        let currentUPIPerson = null;
+
+        function openUPIModal(person) {
+            currentUPIPerson = person;
+            const modal = document.getElementById('upiModal');
+            const input = document.getElementById('upiInput');
+            const title = document.getElementById('upiModalTitle');
+            
+            title.textContent = `${peopleUPI[person] ? 'Edit' : 'Add'} UPI ID for ${person}`;
+            input.value = peopleUPI[person] || '';
+            input.focus();
+            
+            modal.style.display = 'block';
+            hapticFeedback('light');
+        }
+
+        function closeUPIModal() {
+            document.getElementById('upiModal').style.display = 'none';
+            currentUPIPerson = null;
+        }
+
+        function saveUPI() {
+            if (!currentUPIPerson) return;
+            
+            const upiId = document.getElementById('upiInput').value.trim();
+            
+            if (upiId && isValidUPI(upiId)) {
+                peopleUPI[currentUPIPerson] = upiId;
+                showToast(`UPI ID saved for ${currentUPIPerson}!`);
+                hapticFeedback('medium');
+            } else {
+                showToast('Please enter a valid UPI ID!', 'error');
+                return;
+            }
+            
+            saveData();
+            updatePeopleList();
+            closeUPIModal();
+        }
+
+        function validateUPIInput() {
+            const input = document.getElementById('upiInput');
+            const validation = document.getElementById('upiValidation');
+            const upiId = input.value.trim();
+            
+            if (!upiId) {
+                validation.innerHTML = '';
+                input.style.borderColor = 'var(--border)';
+                return;
+            }
+            
+            if (isValidUPI(upiId)) {
+                validation.innerHTML = '<i class="fas fa-check" style="color: var(--success); margin-right: 5px;"></i>Valid UPI ID';
+                validation.style.color = 'var(--success)';
+                input.style.borderColor = 'var(--success)';
+            } else {
+                validation.innerHTML = '<i class="fas fa-times" style="color: var(--danger); margin-right: 5px;"></i>Invalid UPI ID format';
+                validation.style.color = 'var(--danger)';
+                input.style.borderColor = 'var(--danger)';
+            }
+        }
+
+        function isValidUPI(upiId) {
+            const patterns = [
+                /^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/,
+                /^[0-9]{10}@[a-zA-Z]{2,64}$/,
+                /^[a-zA-Z0-9.\-_]+@(paytm|phonepe|gpay|ybl|oksbi|axl|ibl|icici|hdfc|sbi|pnb|boi|canara|union|indian|federal|kotak|yes|idbi|rbl|dbs|sc|hsbc|citi)$/i
+            ];
+            
+            return patterns.some(pattern => pattern.test(upiId));
+        }
+
+        function removeUPI() {
+            if (!currentUPIPerson) return;
+            
+            delete peopleUPI[currentUPIPerson];
+            showToast(`UPI ID removed for ${currentUPIPerson}!`);
+            hapticFeedback('light');
+            
+            saveData();
+            updatePeopleList();
+            closeUPIModal();
+        }
+
+        document.getElementById('personName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') addPerson();
+        });
+
+        document.getElementById('amount').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') addExpense();
+        });
+
+        document.getElementById('upiInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') saveUPI();
+        });
+
+        window.addEventListener('click', function(e) {
+            const upiModal = document.getElementById('upiModal');
+            if (e.target === upiModal) closeUPIModal();
+        });
+
+        updateCounts();
+    </script>
+</body>
+</html>
